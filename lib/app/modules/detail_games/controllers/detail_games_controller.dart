@@ -8,16 +8,22 @@ class DetailGamesController extends GetxController {
   var isError = false.obs;
   var errmsg = "".obs;
   var details = DetailGames();
+  RxBool isVisible = false.obs;
   int? id;
 
   final count = 0.obs;
 
-  get get => null;
   @override
   void onInit() {
     getArgument();
     getDetail(id!);
     super.onInit();
+
+    if (isVisible.isTrue) {
+      isVisible.value = false;
+    } else {
+      isVisible.value = true;
+    }
   }
 
   @override
@@ -27,7 +33,6 @@ class DetailGamesController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 
   void getArgument() {
     var args = Get.arguments;
@@ -45,7 +50,7 @@ class DetailGamesController extends GetxController {
       final data = result;
       isLoading(false);
       isError(false);
-      details = DetailGames.fromJson(data);
+      details = DetailGames.fromJson(result);
       return details;
     } catch (e) {
       isLoading(false);

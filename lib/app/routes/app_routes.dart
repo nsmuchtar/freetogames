@@ -7,10 +7,12 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const LIST_GAME = _Paths.LIST_GAME;
   static const DETAIL_GAMES = _Paths.DETAIL_GAMES;
+  static const SORT_DIALOG = _Paths.SORT_DIALOG;
 }
 
 abstract class _Paths {
   static const HOME = '/home';
   static const LIST_GAME = '/list-game';
   static const DETAIL_GAMES = '/detail-games';
+  static const SORT_DIALOG = '/sort_dialog';
 }

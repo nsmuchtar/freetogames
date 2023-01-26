@@ -1,3 +1,4 @@
+import 'package:freetogames_dio_flutter/pages/sort_dialog.dart';
 import 'package:get/get.dart';
 
 import 'package:freetogames_dio_flutter/app/modules/detail_games/bindings/detail_games_binding.dart';
@@ -28,6 +29,11 @@ class AppPages {
     GetPage(
       name: _Paths.DETAIL_GAMES,
       page: () => DetailGamesView(),
+      binding: DetailGamesBinding(),
+    ),
+    GetPage(
+      name: _Paths.SORT_DIALOG,
+      page: () => SortDialog(),
       binding: DetailGamesBinding(),
     ),
   ];
