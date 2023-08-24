@@ -317,11 +317,15 @@ class DetailGamesView extends GetView<DetailGamesController> {
                         height: 15,
                       ),
                       detailGames(),
-                      carouselImage(),
+                      _controller.details.screenshots != null
+                          ? carouselImage()
+                          : SizedBox(),
                       SizedBox(
                         height: 15.h,
                       ),
-                      systemRequirement(),
+                      controller.details.minimumSystemRequirements != null
+                          ? systemRequirement()
+                          : SizedBox(),
                       description(),
                     ],
                   ),

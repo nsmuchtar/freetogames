@@ -1,33 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SortDialog extends StatelessWidget {
-  final List<String> sorts = [
-    'Release Date',
-    'Popularity',
-    'Alphabetical',
-    'Relevance',
-  ].obs;
-
-  List<String> genres = [
-    "Shooter",
-    "MMOARPG",
-    "ARPG",
-    "Strategy",
-    "MMORPG",
-    "Fighting",
-    "Action RPG",
-    "Battle Royale",
-    "MOBA",
-    "Racing",
-    "Card Game",
-    "Sports",
-    "MMOFPS",
-    "MMO",
-    "Social",
-    "Fantasy"
-  ].obs;
+// ignore: must_be_immutable
+class PlatformDialog extends StatelessWidget {
+  List<String> platforms = [
+    'All',
+    'Browser',
+    'PC',
+  ];
 
   Widget listData(List all) {
     return ListView(
@@ -71,12 +52,12 @@ class SortDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sort By'),
+        title: Text('Platform'),
         centerTitle: true,
         backgroundColor: Color(0xff272b30),
       ),
       backgroundColor: Color(0xff32383e),
-      body: listData(genres),
+      body: listData(platforms),
     );
   }
 }

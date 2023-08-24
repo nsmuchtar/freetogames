@@ -1,7 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:freetogames_dio_flutter/app/routes/app_pages.dart';
-import 'package:freetogames_dio_flutter/pages/sort_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/genre_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/platform_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/sort_by_dialog.dart';
 import 'package:get/get.dart';
 import '../controllers/list_game_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,11 +19,13 @@ class ListGameView extends GetView<ListGameController> {
         children: [
           Flexible(
             child: TextField(
+              autofocus: false,
               style: TextStyle(
                 color: Color(0xffaaaaaa),
                 fontSize: 15,
               ),
               decoration: InputDecoration(
+                filled: true,
                 fillColor: Color(0xffaaaaaa),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -77,7 +81,10 @@ class ListGameView extends GetView<ListGameController> {
                       Get.toNamed(
                         Routes.DETAIL_GAMES,
                         arguments: {'id': _controller.games[index].id},
-                      );
+                      )?.then((value) {
+                        _controller.isVisible.value = false;
+                        _controller.onInit();
+                      });
                     }),
                     child: Card(
                       margin: EdgeInsets.all(10),
@@ -205,64 +212,55 @@ class ListGameView extends GetView<ListGameController> {
     }
 
     Widget filter() {
-      return Obx(() => Visibility(
-            visible: _controller.isVisible.value,
-            child: Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 2,
-                  color: Color(0xffaaaaaa),
-                ),
-                borderRadius: BorderRadius.circular(20),
+      return Obx(
+        () => Visibility(
+          visible: _controller.isVisible.value,
+          child: Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 2,
+                color: Color(0xffaaaaaa),
               ),
-              height: 180.h,
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Filter',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    // Obx(
-                    //   () {
-                    //     return DropdownButton(
-                    //       hint: Text(
-                    //         'Choose Genre',
-                    //         style: TextStyle(
-                    //           color: Colors.grey,
-                    //         ),
-                    //       ),
-                    //       items: [],
-                    //       onChanged: ((value) {}),
-                    //     );
-                    //   },
-                    // )
-                  ],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Filter',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 15.h,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      'Sort By',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
+                    Container(
+                      width: 50.w,
+                      child: Text(
+                        'Genre',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(SortDialog())!.then((value) {
-                          _controller.selectSort(value);
-                        });
+                        // Get.to(GenreDialog())!.then((value) {
+                        //   _controller.sortByGenre(value);
+                        // });
+                        Get.to(GenreDialog())!.then(
+                          (value) {
+                            _controller.genre.value = value;
+                          },
+                        );
                       },
                       child: Container(
                         width: 150.w,
@@ -276,7 +274,7 @@ class ListGameView extends GetView<ListGameController> {
                           () => Center(
                             child: Text(
                               textAlign: TextAlign.center,
-                              _controller.sortBy.value,
+                              _controller.genre.value,
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontWeight: FontWeight.w700,
@@ -287,49 +285,122 @@ class ListGameView extends GetView<ListGameController> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,
-                    //   children: [
-                    //     OutlinedButton(
-                    //       style: ButtonStyle(
-                    //         backgroundColor:
-                    //             MaterialStatePropertyAll<Color>(Colors.red),
-                    //       ),
-                    //       onPressed: () {},
-                    //       child: Text(
-                    //         'Reset',
-                    //         style: TextStyle(
-                    //           color: Color(0xff272b30),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     SizedBox(
-                    //       height: 10.h,
-                    //       width: 20.w,
-                    //     ),
-                    //     OutlinedButton(
-                    //       style: ButtonStyle(
-                    //         backgroundColor:
-                    //             MaterialStatePropertyAll<Color>(Colors.blue),
-                    //       ),
-                    //       onPressed: () {},
-                    //       child: Text(
-                    //         'Apply',
-                    //         style: TextStyle(
-                    //           color: Color(0xff272b30),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // )
                   ],
                 ),
-              ]),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 50.w,
+                      child: Text(
+                        'Platform',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(PlatformDialog())!.then(
+                          (value) {
+                            _controller.platform.value = value;
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 150.w,
+                        height: 25.h,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xff32383e),
+                        ),
+                        child: Obx(
+                          () => Center(
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              _controller.platform.value,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 50.w,
+                      child: Text(
+                        'Sort By',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(SortDialog())!.then(
+                          (value) {
+                            _controller.sortBy.value = value;
+                          },
+                        );
+                      },
+                      child: Obx(
+                        () => Center(
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            _controller.sortBy.value,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  OutlinedButton(
+                    onPressed: () {
+                      _controller.resetSort();
+                    },
+                    child: Text('Reset'),
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      _controller.sorting();
+                    },
+                    child: Text('Apply'),
+                  ),
+                ])
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     }
 
     return SafeArea(

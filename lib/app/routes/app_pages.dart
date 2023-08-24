@@ -1,4 +1,6 @@
-import 'package:freetogames_dio_flutter/pages/sort_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/genre_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/platform_dialog.dart';
+import 'package:freetogames_dio_flutter/pages/sort_by_dialog.dart';
 import 'package:get/get.dart';
 
 import 'package:freetogames_dio_flutter/app/modules/detail_games/bindings/detail_games_binding.dart';
@@ -32,6 +34,16 @@ class AppPages {
       binding: DetailGamesBinding(),
     ),
     GetPage(
+      name: _Paths.GENRE_DIALOG,
+      page: () => GenreDialog(),
+      binding: DetailGamesBinding(),
+    ),
+        GetPage(
+      name: _Paths.PLATFORM_DIALOG,
+      page: () => PlatformDialog(),
+      binding: DetailGamesBinding(),
+    ),
+        GetPage(
       name: _Paths.SORT_DIALOG,
       page: () => SortDialog(),
       binding: DetailGamesBinding(),

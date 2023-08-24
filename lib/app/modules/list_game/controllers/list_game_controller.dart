@@ -10,9 +10,9 @@ class ListGameController extends GetxController {
   var errmsg = "".obs;
   var games = <Games>[].obs;
   var sorts = <Games>[].obs;
-  var genre = ''.obs;
-  var platform = ''.obs;
-  var sortBy = 'Choose Sort'.obs;
+  var genre = 'Shooter'.obs;
+  var platform = 'All'.obs;
+  var sortBy = 'Release Date'.obs;
   List<String> listGenre = [];
   RxBool isVisible = false.obs;
   Dio dio = Dio();
@@ -27,9 +27,7 @@ class ListGameController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
+  void onReady() {}
 
   @override
   void onClose() {}
@@ -63,7 +61,7 @@ class ListGameController extends GetxController {
   Future<List<Games>> getListByGenre(String genre) async {
     isLoading(true);
     try {
-      final result = await ApiClient().getData(ApiConst.listByGenres(genre));
+      final result = await ApiClient().getData(ApiConst.sortByGenre(genre));
       final List data = result;
       isLoading(false);
       isError(false);
@@ -90,6 +88,27 @@ class ListGameController extends GetxController {
       listGenre = genres.toList();
       return listGenre;
     } catch (e) {
+      isLoading(false);
+      isError(true);
+      errmsg(e.toString());
+      throw Exception(e);
+    }
+  }
+
+  Future<List<Games>> resetSort() async {
+    genre.value = 'Shooter';
+    platform.value = 'All';
+    sortBy.value = 'Release Date';
+    print(sortBy.value);
+    isLoading(true);
+    try {
+      final result = await ApiClient().getData(ApiConst.listGames);
+      final List data = result;
+      isLoading(false);
+      isError(false);
+      games.value = data.map((e) => Games.fromJson(e)).toList();
+      return games;
+    } catch (e) {
       print(e);
       isLoading(false);
       isError(true);
@@ -98,16 +117,16 @@ class ListGameController extends GetxController {
     }
   }
 
-  void selectSort(String sort) {
-    sortBy.value = sort;
-  }
-
   Future<List<Games>> sorting() async {
     isLoading(true);
     try {
-      final result =
-          await ApiClient().getData(ApiConst.sorting(genre, sortBy, platform));
-      print(ApiConst.sorting(genre, sortBy, platform));
+      final result = await ApiClient().getData(
+        ApiConst.sorting(
+          genre.value.toLowerCase(),
+          sortBy.value.toString().replaceAll(' ', '-'),
+          platform.value.toLowerCase(),
+        ),
+      );
       final List data = result;
       isLoading(false);
       isError(false);

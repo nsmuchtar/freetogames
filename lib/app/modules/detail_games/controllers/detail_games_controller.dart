@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:freetogames_dio_flutter/app/models/detail_games.dart';
 import 'package:get/get.dart';
 import '../../../services/api.dart';
@@ -28,6 +30,7 @@ class DetailGamesController extends GetxController {
 
   @override
   void onReady() {
+    print('ini on ready');
     super.onReady();
   }
 
@@ -47,10 +50,10 @@ class DetailGamesController extends GetxController {
     try {
       final result =
           await ApiClient().getData(ApiConst.detailGames(id.toString()));
-      final data = result;
       isLoading(false);
       isError(false);
       details = DetailGames.fromJson(result);
+      log(details.minimumSystemRequirements.toString());
       return details;
     } catch (e) {
       isLoading(false);

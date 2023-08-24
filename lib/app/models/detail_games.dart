@@ -60,8 +60,10 @@ class DetailGames {
         developer: json["developer"],
         releaseDate: DateTime.parse(json["release_date"]),
         freetogameProfileUrl: json["freetogame_profile_url"],
-        minimumSystemRequirements: MinimumSystemRequirements.fromJson(
-            json["minimum_system_requirements"]),
+        minimumSystemRequirements: json['minimum_system_requirements'] != null
+            ? MinimumSystemRequirements.fromJson(
+                json["minimum_system_requirements"])
+            : null,
         screenshots: json["screenshots"] == null
             ? []
             : List<Screenshot?>.from(
